@@ -1,2 +1,2 @@
-language-tool-python
+language_check
 groq
