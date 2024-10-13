@@ -1,25 +1,13 @@
-import os 
+import os
 import streamlit as st
-import os
-import subprocess
-
-def install_java():
-    if not os.path.exists("/usr/bin/java"):
-        # Install Java on the system
-        subprocess.run(["apt-get", "install", "openjdk-11-jre-headless", "-y"])
-        os.environ['JAVA_HOME'] = "/usr/lib/jvm/java-11-openjdk-amd64"
-        os.environ['PATH'] += os.pathsep + os.path.join(os.environ['JAVA_HOME'], 'bin')
-
-install_java()
-
-import language_tool_python
-import os
+import language_check
 from groq import Groq
+
 # Initialize the Groq client
 client = Groq(api_key="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")
 class GrammarCorrector:
-    def __init__(self, language='en-US'):
-        self.tool = language_tool_python.LanguageTool(language)
+    def __init__(self):
+        self.tool = language_check.LanguageTool('en-US')
 
     def identify_mistakes(self, text):
         matches = self.tool.check(text)
@@ -29,18 +17,17 @@ class GrammarCorrector:
             start = match.offset
             end = start + match.errorLength
             mistake = text[start:end]
-            mistakes.append((mistake, start, end))
+            mistakes.append((mistake, start, end, match.msg))
 
         return mistakes
 
     def report_mistakes(self, text):
         mistakes = self.identify_mistakes(text)
         st.write("\n--- Mistakes Found ---")
-        for i, (mistake, start, end) in enumerate(mistakes, start=1):
-            st.write(f"{i}. Mistake: '{mistake}' at position {start}-{end}")
+        for i, (mistake, start, end, message) in enumerate(mistakes, start=1):
+            st.write(f"{i}. Mistake: '{mistake}' at position {start}-{end}. {message}")
 
         return mistakes
-
 
 # App Configuration
 st.set_page_config(page_title="EnglishCoach", layout="wide")
