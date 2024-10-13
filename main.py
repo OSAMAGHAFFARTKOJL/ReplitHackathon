@@ -29,7 +29,7 @@ class GrammarCorrector:
         st.write("\n--- Spelling Mistakes Found ---")
         for i, (mistake, start, end) in enumerate(mistakes, start=1):
             correction = self.spell.correction(mistake.lower())
-            st.write(f"{i}. Misspelled: '{mistake}' at position {start}-{end}. Suggestion: '{correction}'")
+            st.write(f"{i}. Misspelled: '{mistake}' at position {start}-{end}.")
 
         return mistakes
 # App Configuration
