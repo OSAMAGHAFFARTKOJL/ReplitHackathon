@@ -2,6 +2,7 @@ import os
 import streamlit as st
 from spellchecker import SpellChecker
 from groq import Groq
+import re
 
 # Initialize the Groq client
 client = Groq(api_key="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")
