@@ -5,7 +5,7 @@ from groq import Groq
 
 # Initialize the Groq client
 client = Groq(api_key="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")
-class SpellingCorrector:
+class GrammarCorrector:
     def __init__(self):
         self.spell = SpellChecker()
 
