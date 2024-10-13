@@ -1,5 +1,16 @@
 import os 
 import streamlit as st
+import os
+import subprocess
+
+def install_java():
+    if not os.path.exists("/usr/bin/java"):
+        # Install Java on the system
+        subprocess.run(["apt-get", "install", "openjdk-11-jre-headless", "-y"])
+        os.environ['JAVA_HOME'] = "/usr/lib/jvm/java-11-openjdk-amd64"
+        os.environ['PATH'] += os.pathsep + os.path.join(os.environ['JAVA_HOME'], 'bin')
+
+install_java()
 
 import language_tool_python
 import os
