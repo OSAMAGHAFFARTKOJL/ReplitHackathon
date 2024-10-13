@@ -10,13 +10,16 @@ class GrammarCorrector:
         self.spell = SpellChecker()
 
     def identify_mistakes(self, text):
-        words = text.split()
+        words = re.findall(r'\b\w+\b', text.lower())
         misspelled = self.spell.unknown(words)
         mistakes = []
 
         for word in misspelled:
-            index = text.index(word)
-            mistakes.append((word, index, index + len(word)))
+            for match in re.finditer(r'\b' + re.escape(word) + r'\b', text.lower()):
+                start = match.start()
+                end = match.end()
+                original_word = text[start:end]
+                mistakes.append((original_word, start, end))
 
         return mistakes
 
@@ -24,8 +27,8 @@ class GrammarCorrector:
         mistakes = self.identify_mistakes(text)
         st.write("\n--- Spelling Mistakes Found ---")
         for i, (mistake, start, end) in enumerate(mistakes, start=1):
-            correction = self.spell.correction(mistake)
-            st.write(f"{i}. Misspelled: '{mistake}' at position {start}-{end}.")
+            correction = self.spell.correction(mistake.lower())
+            st.write(f"{i}. Misspelled: '{mistake}' at position {start}-{end}. Suggestion: '{correction}'")
 
         return mistakes
 # App Configuration
